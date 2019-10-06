@@ -1,3 +1,5 @@
+close all;
+%% Teilaufgabe 1
 roadColors = makesymbolspec('Line',...
  {'CLASS', 1, 'Color', 'r'}, ...
  {'CLASS', 2, 'Color', 'g'}, ...
@@ -6,6 +8,19 @@ roadColors = makesymbolspec('Line',...
  {'CLASS', 5, 'Color', 'k'}, ...
  {'CLASS', 6, 'Color', 'y'},...
  {'CLASS', 7, 'Color', 'c'});
+shapeRoads = shaperead('boston_roads.shp');
 figure
-mapshow('boston_roads.shp', 'SymbolSpec', roadColors);
+mapshow(roads, 'SymbolSpec', roadColors);
 
+%% Teilaufgabe 2
+% read is actually not needed here ...
+[tifRoads, R] = geotiffread('boston.tif');
+% figure
+% mapshow(tifRoads, R);
+
+info = geotiffinfo('boston.tif');
+mstruct = geotiff2mstruct(info);
+[lat, lon] = projinv(mstruct, [shapeRoads.X], [shapeRoads.Y]);
+
+figure
+geoshow(lat, lon);
