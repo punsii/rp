@@ -1,4 +1,4 @@
-function []= init_shape()
+function []= init_shapefile()
     info = geotiffinfo('boston.tif');
     mstruct = geotiff2mstruct(info);
     

@@ -10,7 +10,7 @@ roadColors = makesymbolspec('Line',...
  {'CLASS', 7, 'Color', 'c'});
 shapeRoads = shaperead('boston_roads.shp');
 figure
-mapshow(roads, 'SymbolSpec', roadColors);
+mapshow(shapeRoads, 'SymbolSpec', roadColors);
 
 %% Teilaufgabe 2
 % read is actually not needed here ...
