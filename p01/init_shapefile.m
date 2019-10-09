@@ -1,5 +1,5 @@
-function []= init_shapefile()
-    info = geotiffinfo('boston.tif');
+function []= init_shapefile(path)
+    info = geotiffinfo(path);
     mstruct = geotiff2mstruct(info);
     
     highway = shaperead('boston_roads.shp',...
