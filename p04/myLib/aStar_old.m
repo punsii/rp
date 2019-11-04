@@ -1,4 +1,4 @@
-function [route] = a_star(adj_matrix, cords, startNode, endNode)
+function [route, open, close] = a_star(adj_matrix, cords, startNode, endNode)
 %A_STAR returns a list of indices that correspond to the shortest path
 
 %% Constants
@@ -16,8 +16,8 @@ M = size(adj_matrix, 1);
 L = [inf(M, 3), cords, zeros(M, 1)];
 close = false(M, 1);
 open = false(M, 1);
+route = zeros(0,0);
 
-%% set start
 open(startNode) = true;
 L(startNode, G) = 0;
 L(startNode, PREV) = startNode;
@@ -43,7 +43,6 @@ while (~(isempty(find(open, 1)) || close(endNode)))
             L(j, F) = L(j, G) + L(j, H);
         end
         open(j) = true;
-        fprintf('Now open: %i\n', j)
     end
     open(current) = false;
     close(current) = true;
@@ -62,21 +61,6 @@ while (current ~= startNode)
     tmpRoute = [tmpRoute, prev];
     current = prev;    
 end
+
 route = flip(tmpRoute);
 end
-%% Aus der VL:
-%Init
-% close = fals(m,1);
-% open = empty
-% L = Liste aller distanzen zum Endknoten (=h) (Berechnung on the fly)
-%                 (evtl auch noch die Koordinaten, sowie g und f), Vorgänger
-%                 (f = g + h)
-% while (true) %abbruch wenn end aus open, oder open ist leer.
-%     % füge alle nachbarkanten das current-nodes zum Rand hinzu
-%         % Berechne F-Wert neu. (current + dist to current + h)
-%         % Wenn f-Neu besser als alter Wert -> Update von L und open
-%     % current aus open liste löschen und in closed verschieben.
-%     % Knoten mit kleinstem f-Wert wird neuer current-Node
-% 
-% end
-% 

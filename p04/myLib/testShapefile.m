@@ -1,8 +1,5 @@
 function [] = testShapefile(A, L, nodeDistanceThreshhold)
 
-figure;
-hold on;
-
 [rows, cols, elements] = find(A);
 for j = 1:length(rows)
     if (elements(j) == nodeDistanceThreshhold)
@@ -11,5 +8,4 @@ for j = 1:length(rows)
         mapshow([L(cols(j),1), L(rows(j),1)], [L(cols(j),2), L(rows(j),2)]);
     end
 end
-hold off;
 end
