@@ -1,4 +1,4 @@
-function [route, open, closed] = a_star(adj_matrix, cords, startNode, endNode, oBufSize, map)
+function [route, open, closed] = a_star(adj_matrix, cords, startNode, endNode, oBufSize, map, contDraw)
 %A_STAR returns a list of indices that correspond to the shortest path
 
 %% Constants
@@ -36,8 +36,8 @@ Z = zeros(50);
 % Z = (Xtmp+71.08).^2 + (Ytmp-42.355).^2;
 for xin = 1:50
     for yin = 1:50
-        Z(yin, xin) = calcDistance([x(xin), y(yin)], L(startNode, X:Y)) +...
-            calcDistance([x(xin),y(yin)], L(endNode, X:Y));
+        Z(yin, xin) = log(calcDistance([x(xin), y(yin)], L(startNode, X:Y)) +...
+            calcDistance([x(xin),y(yin)], L(endNode, X:Y)));
     end
 end
 contour(Xtmp,Ytmp,Z)
@@ -76,7 +76,9 @@ while (~(isempty(open) || closed(endNode)))
         end
         open = [open; j, L(j, F)];
         plot(L(j, X), L(j, Y), 'ko', 'LineWidth', 2); %Plot reached point
-%         drawnow();
+        if (contDraw)
+            drawnow();
+        end
     end
     open(open(:, 1) == current, :) = [];
     closed(current) = true;

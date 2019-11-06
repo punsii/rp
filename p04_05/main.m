@@ -1,19 +1,25 @@
 %% Load
-load('matFiles/boston_matrix_all.mat') % 'A_all', 'L_all', 'nodeDistanceThreshhold'
+% 'A_all', 'L_all', 'nodeDistanceThreshhold'
+load('matFiles/boston_matrix_all.mat')
 L = L_all;
 A = A_all;
+% 'local'
 load('matFiles\boston_transformed_all.mat')
 map = all;
 
-% load('matFiles/boston_matrix_highway.mat') % 'A_highway', 'L_highway', 'nodeDistanceThreshhold'
+% % 'A_highway', 'L_highway', 'nodeDistanceThreshhold'
+% load('matFiles/boston_matrix_highway.mat')
 % L = L_highway;
 % A = A_highway;
+% % 'highway'
 % load('matFiles\boston_transformed_local.mat')
 % map = highway;
 
-% load('matFiles/boston_matrix_local.mat') % 'A_local', 'L_local', 'nodeDistanceThreshhold'
+% % 'A_local', 'L_local', 'nodeDistanceThreshhold'
+% load('matFiles/boston_matrix_local.mat')
 % L = L_local;
 % A = A_local;
+% % 'local'
 % load('matFiles\boston_transformed_local.mat')
 % map = local;
 
@@ -23,9 +29,11 @@ start = 10;
 target = 3462;
 %3462
 %900
+contDraw = false;
 
 %% Main
-[route, open, closed] = aStarGraphic(A, L, start, target, oBufSize, map);
+[route, open, closed] = ...
+    aStarGraphic(A, L, start, target, oBufSize, map, contDraw);
 
 disp(route)
 disp(calcDistance(L(start, :), L(target, :)))
