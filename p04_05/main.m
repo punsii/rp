@@ -23,7 +23,7 @@ map = all;
 % load('matFiles\boston_transformed_local.mat')
 % map = local;
 
-oBufSize = 1000;
+oBufSize = 5;
 start = 10;
 %650
 target = 3462;

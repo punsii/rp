@@ -23,11 +23,11 @@ L(startNode, G) = 0;
 L(startNode, PREV) = startNode; 
 
 %% Init Plots
-close all;
-% figure('units','normalized','outerposition', [0 0 1 1]);
-% hold on;
-mapshow(map)
+% close all;
+% figure('normalized','outerposition', [0 0 1 1]);
+figure();
 hold on;
+mapshow(map)
 % Contourplot
 x = linspace(-71.12, -71.03, 50);
 y = linspace(42.34, 42.375, 50);

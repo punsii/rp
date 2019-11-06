@@ -2,11 +2,17 @@ function [distance] = calcDistance(p1, p2)
 %CALCDISTANCE Calculate distance between two points
 %   Distance in lat/lot (which is stupid)
 
-%V4
-% lat1 = p1(1);
-% lat2 = p2(1);
-% lon1 = p1(2);
-% lon2 = p2(2);
+    
+% V1
+xdist = p2(1) - p1(1);
+ydist = p2(2) - p1(2);
+distance = sqrt(xdist^2 + ydist^2);
+
+% V4
+% lat1 = deg2rad(p1(1));
+% lat2 = deg2rad(p2(1));
+% lon1 = deg2rad(p1(2));
+% lon2 = deg2rad(p2(2));
 % 
 % R = 6371e3;
 % Dlat = (lat2-lat1);
@@ -37,9 +43,4 @@ function [distance] = calcDistance(p1, p2)
 %     c = 2 * atan2(sqrt(a), sqrt(1-a));
 %     d = R * c;
 %     distance = d * 1000; % meters
-    
-% V1
-    xdist = p2(1) - p1(1);
-    ydist = p2(2) - p1(2);
-    distance = sqrt(xdist^2 + ydist^2);
 end

@@ -1,4 +1,4 @@
-function [route, open, closed] = a_star(adj_matrix, cords, startNode, endNode, oBufSize, map, contDraw)
+function [route, open, closed, plots] = aStarGraphic(adj_matrix, cords, startNode, endNode, oBufSize, contDraw)
 %A_STAR returns a list of indices that correspond to the shortest path
 
 %% Constants
@@ -22,31 +22,9 @@ open(1, :) = [startNode, 0]; % h is not needed for the startNode
 L(startNode, G) = 0;
 L(startNode, PREV) = startNode; 
 
-%% Init Plots
-close all;
-% figure('units','normalized','outerposition', [0 0 1 1]);
-% hold on;
-mapshow(map)
+plots = [];
+
 hold on;
-% Contourplot
-x = linspace(-71.12, -71.03, 50);
-y = linspace(42.34, 42.375, 50);
-[Xtmp, Ytmp] = meshgrid(x,y);
-Z = zeros(50);
-% Z = (Xtmp+71.08).^2 + (Ytmp-42.355).^2;
-for xin = 1:50
-    for yin = 1:50
-        Z(yin, xin) = log(calcDistance([x(xin), y(yin)], L(startNode, X:Y)) +...
-            calcDistance([x(xin),y(yin)], L(endNode, X:Y)));
-    end
-end
-contour(Xtmp,Ytmp,Z)
-
-%start and end
-plot(L(startNode, X), L(startNode, Y), 'rx', 'LineWidth', 15);
-plot(L(endNode, X), L(endNode, Y), 'bx', 'LineWidth', 15);
-drawnow();
-
 %% main loop
 while (~(isempty(open) || closed(endNode)))
     [~, idx] = sort(open(:, 2));
@@ -75,14 +53,16 @@ while (~(isempty(open) || closed(endNode)))
             L(j, F) = L(j, G) + L(j, H);
         end
         open = [open; j, L(j, F)];
-        plot(L(j, X), L(j, Y), 'ko', 'LineWidth', 2); %Plot reached point
+        plots = [plots, ...
+            plot(L(j, X), L(j, Y), 'ko', 'LineWidth', 1)]; %Plot reached point
         if (contDraw)
             drawnow();
         end
     end
     open(open(:, 1) == current, :) = [];
     closed(current) = true;
-    plot(L(current, X), L(current, Y), 'g.', 'MarkerSize', 15);
+    plots = [plots, ...
+        plot(L(current, X), L(current, Y), 'g.', 'MarkerSize', 10)];
 end
 
 %% reconstruct path
@@ -100,9 +80,10 @@ while (current ~= startNode)
 end
 
 route = flip(tmpRoute);
-plot(L(route, X), L(route, Y), 'm', 'LineWidth', 3);
+plots = [plots, plot(L(route, X), L(route, Y), 'm', 'LineWidth', 3)];
 
 hold off;
+
 end
 
 

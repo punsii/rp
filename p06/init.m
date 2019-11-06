@@ -1,4 +1,4 @@
-nodeDistanceThreshhold = 5;
+nodeDistanceThreshhold = 0.00003;
 
 load('matFiles/boston_transformed_all.mat') %loads 'all'
 [A_all, L_all] = shapefileToAdjMatrix(all, nodeDistanceThreshhold);

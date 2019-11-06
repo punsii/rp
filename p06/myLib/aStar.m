@@ -1,9 +1,7 @@
-function [route, open, close] = a_star(adj_matrix, cords, startNode, endNode)
+function [route, open, closed] = aStar(adj_matrix, cords, startNode, endNode, oBufSize)
 %A_STAR returns a list of indices that correspond to the shortest path
 
 %% Constants
-O_BUF_SIZE = 10;
-
 F = 1;  % G + H
 G = 2;  % dist to start
 H = 3;  % dist to end (aproximation)
@@ -13,28 +11,29 @@ PREV = 6; % needed for path
 
 M = size(adj_matrix, 1);
 
-%% Init
+%% Init Variables
 % L(F, G, H, X, Y, PREV)
 L = [inf(M, 3), cords, zeros(M, 1)];
-close = false(M, 1);
+closed = false(M, 1);
 open = zeros(0, 2);
 route = [];
 
 open(1, :) = [startNode, 0]; % h is not needed for the startNode
 L(startNode, G) = 0;
-L(startNode, PREV) = startNode;
+L(startNode, PREV) = startNode; 
 
+hold on;
 %% main loop
-while (~(isempty(open) || close(endNode)))
+while (~(isempty(open) || closed(endNode)))
     [~, idx] = sort(open(:, 2));
     open = open(idx, :);
-    if (size(open, 1) > O_BUF_SIZE)
-        open = open(1:O_BUF_SIZE, :);
+    if (size(open, 1) > oBufSize)
+        open = open(1:oBufSize, :);
     end
     
     current = open(1, 1);
     neigh = find(adj_matrix(current, :));
-    for j = neigh(~close(neigh))
+    for j = neigh(~closed(neigh))
         if (j == current)
             continue
         end
@@ -54,7 +53,7 @@ while (~(isempty(open) || close(endNode)))
         open = [open; j, L(j, F)];
     end
     open(open(:, 1) == current, :) = [];
-    close(current) = true;
+    closed(current) = true;
 end
 
 %% reconstruct path
