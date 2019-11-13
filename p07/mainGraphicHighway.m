@@ -1,27 +1,21 @@
 %% Load
-% 'A_all', 'L_all', 'nodeDistanceThreshhold'
-load('matFiles/boston_matrix_all.mat')
-L = L_all;
-A = A_all;
-% 'local'
+% % 'A_all', 'L_all', 'nodeDistanceThreshhold'
+% load('matFiles/boston_matrix_all.mat')
+% L = L_all;
+% A = A_all;
+% % 'local'
 load('matFiles\boston_transformed_all.mat')
 map = all;
 
-% % 'A_highway', 'L_highway', 'nodeDistanceThreshhold'
-% load('matFiles/boston_matrix_highway.mat')
-% L = L_highway;
-% A = A_highway;
-% % 'highway'
-% load('matFiles\boston_transformed_local.mat')
-% map = highway;
+% 'A_highway', 'L_highway', 'nodeDistanceThreshhold'
+load('matFiles/boston_matrix_highway.mat')
+% 'highway'
+load('matFiles\boston_transformed_local.mat')
 
-% % 'A_local', 'L_local', 'nodeDistanceThreshhold'
-% load('matFiles/boston_matrix_local.mat')
-% L = L_local;
-% A = A_local;
-% % 'local'
-% load('matFiles\boston_transformed_local.mat')
-% map = local;
+% 'A_local', 'L_local', 'nodeDistanceThreshhold'
+load('matFiles/boston_matrix_local.mat')
+% 'local'
+load('matFiles\boston_transformed_local.mat')
 
 % start = 10;
 % %650
@@ -31,19 +25,11 @@ map = all;
 oBufSize = 100;
 
 %% init plots
+close all;
+mapPlot = mapshow(map);
+hold on;
 xRange = [min(L(:, 1)), max(L(:, 1))];
 yRange = [min(L(:, 2)), max(L(:, 2))];
-
-close all;
-figure;
-mapPlot = mapshow(map);
-% axis([xRange, yRange]);
-hold on;
-geoshow('resources/myBoston_resized.jpg');
-plot([xRange(1), xRange(1), xRange(2), xRange(2)], ...
-     [yRange(1), yRange(2), yRange(2), yRange(1)], ...
-     'r--');
-delete(mapPlot);
 drawnow();
 
 tmpPlots = [];
@@ -67,9 +53,15 @@ while true
         contPlot(L(start, :), L(target, :), xRange, yRange, 50)];
     drawnow();
 
-    tic;
-    [route, open, closed] = aStar(A, L, start, target, oBufSize);
-    t = toc;
+    hWayEnter = closestHWay(start, all);
+    hWayExit = closestHWay(target, all);
+    
+    [r1, o1, c1] = aStar(A_local, L_local, start, hWayEnter, oBufSize);
+    [r2, o2, c2] = aStar(A_highway, L_highway, hWayEnter, hWayExit, oBufSize);
+    [r3, o3, c3] = aStar(A_local, L_local, hWayExit, target, oBufSize);
+    route = [r1; r2; r3];
+    open = [o1; o2; o3];
+    closed = [c3; c2; c3];
     disp(t);
     open = open(:, 1);
     

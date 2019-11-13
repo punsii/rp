@@ -1,4 +1,4 @@
-function [] = testShapefile(A, L, nodeDistanceThreshhold)
+function [] = testMatrix(A, L, nodeDistanceThreshhold)
 
 [rows, cols, elements] = find(A);
 for j = 1:length(rows)

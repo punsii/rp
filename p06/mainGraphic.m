@@ -33,7 +33,7 @@ oBufSize = 100;
 %% init plots
 close all;
 mapPlot = mapshow(map);
-hold on;
+hold on;geoshow('resources/myBoston_resized.jpg');
 xRange = [min(L(:, 1)), max(L(:, 1))];
 yRange = [min(L(:, 2)), max(L(:, 2))];
 drawnow();
