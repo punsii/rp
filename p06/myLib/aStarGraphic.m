@@ -23,8 +23,6 @@ L(startNode, G) = 0;
 L(startNode, PREV) = startNode; 
 
 plots = [];
-
-hold on;
 %% main loop
 while (~(isempty(open) || closed(endNode)))
     [~, idx] = sort(open(:, 2));
@@ -62,7 +60,7 @@ while (~(isempty(open) || closed(endNode)))
     open(open(:, 1) == current, :) = [];
     closed(current) = true;
     plots = [plots, ...
-        plot(L(current, X), L(current, Y), 'g.', 'MarkerSize', 10)];
+        plot(L(current, X), L(current, Y), 'g.', 'MarkerSize', 15)];
 end
 
 %% reconstruct path
@@ -81,8 +79,6 @@ end
 
 route = flip(tmpRoute);
 plots = [plots, plot(L(route, X), L(route, Y), 'm', 'LineWidth', 3)];
-
-hold off;
 
 end
 

@@ -28,7 +28,7 @@ map = all;
 % target = 3462;
 % %3462
 % %900
-oBufSize = 100;
+oBufSize = inf;
 contDraw = true;
 
 %% init plots
