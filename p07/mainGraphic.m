@@ -1,3 +1,5 @@
+realMap = false;
+
 %% Load
 % 'A_all', 'L_all', 'nodeDistanceThreshhold'
 load('matFiles/boston_matrix_all.mat')
@@ -37,13 +39,18 @@ yRange = [min(L(:, 2)), max(L(:, 2))];
 close all;
 figure;
 mapPlot = mapshow(map);
-% axis([xRange, yRange]);
 hold on;
-geoshow('resources/myBoston_resized.jpg');
-plot([xRange(1), xRange(1), xRange(2), xRange(2)], ...
-     [yRange(1), yRange(2), yRange(2), yRange(1)], ...
-     'r--');
-delete(mapPlot);
+if (realMap)
+    ax = gca;
+    delete(mapPlot);
+    ratio = (ax.XLim(2) - ax.XLim(1)) / (ax.YLim(2) - ax.YLim(1));
+    axis([xRange, yRange]);
+    pbaspect([1, ratio, 1]);
+    geoshow('resources/myBoston_resized.jpg');
+    plot([xRange(1), xRange(1), xRange(2), xRange(2)], ...
+         [yRange(1), yRange(2), yRange(2), yRange(1)], ...
+         'r--');
+end
 drawnow();
 
 tmpPlots = [];

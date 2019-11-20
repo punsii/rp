@@ -1,3 +1,10 @@
+
+oBufSize = inf;
+contDraw = false;
+makeMovie = true;
+movieName = "aStar01.avi";
+realMap = false;
+
 %% Load
 % 'A_all', 'L_all', 'nodeDistanceThreshhold'
 load('matFiles/boston_matrix_all.mat')
@@ -28,15 +35,26 @@ map = all;
 % target = 3462;
 % %3462
 % %900
-oBufSize = inf;
-contDraw = true;
 
 %% init plots
-close all;
-mapPlot = mapshow(map);
-hold on;
 xRange = [min(L(:, 1)), max(L(:, 1))];
 yRange = [min(L(:, 2)), max(L(:, 2))];
+
+close all;
+figure;
+mapPlot = mapshow(map);
+hold on;
+if (realMap)
+    ax = gca;
+    delete(mapPlot);
+    ratio = (ax.XLim(2) - ax.XLim(1)) / (ax.YLim(2) - ax.YLim(1));
+    axis([xRange, yRange]);
+    pbaspect([1, ratio, 1]);
+    geoshow('resources/myBoston_resized.jpg');
+    plot([xRange(1), xRange(1), xRange(2), xRange(2)], ...
+         [yRange(1), yRange(2), yRange(2), yRange(1)], ...
+         'r--');
+end
 drawnow();
 
 tmpPlots = [];
@@ -61,7 +79,7 @@ while true
     drawnow();
 
     [route, open, closed, aStarPlots] = ...
-        aStarGraphic(A, L, start, target, oBufSize, contDraw);
+        aStarGraphic(A, L, start, target, oBufSize, contDraw, makeMovie, movieName);
     tmpPlots = [tmpPlots, aStarPlots];
     
     uiwait(msgbox('New Route?'));
