@@ -1,8 +1,3 @@
-
-oBufSize = inf;
-contDraw = false;
-makeMovie = true;
-movieName = "aStar01.avi";
 realMap = false;
 
 %% Load
@@ -35,6 +30,7 @@ map = all;
 % target = 3462;
 % %3462
 % %900
+oBufSize = 100;
 
 %% init plots
 xRange = [min(L(:, 1)), max(L(:, 1))];
@@ -50,7 +46,7 @@ if (realMap)
     ratio = (ax.XLim(2) - ax.XLim(1)) / (ax.YLim(2) - ax.YLim(1));
     axis([xRange, yRange]);
     pbaspect([1, ratio, 1]);
-    geoshow('resources/myBoston_resized.jpg');
+    geoshow('resources/bostonNew.jpg');
     plot([xRange(1), xRange(1), xRange(2), xRange(2)], ...
          [yRange(1), yRange(2), yRange(2), yRange(1)], ...
          'r--');
@@ -78,9 +74,24 @@ while true
         contPlot(L(start, :), L(target, :), xRange, yRange, 50)];
     drawnow();
 
-    [route, open, closed, aStarPlots] = ...
-        aStarGraphic(A, L, start, target, oBufSize, contDraw, makeMovie, movieName);
-    tmpPlots = [tmpPlots, aStarPlots];
+    tic;
+    [route, open, closed] = aStar(A, L, start, target, oBufSize);
+    t = toc;
+    disp(t);
+    open = open(:, 1);
+    
+    % visited spots
+    j = L([find(closed); open], :);
+    tmpPlots = [tmpPlots, ...
+        scatter(j(:, 1), j(:, 2), 20, ...
+        'MarkerFaceColor', 'g', ...
+        'MarkerEdgeColor', 'k', ...
+        'LineWidth', 1)];
+
+    % route
+    j = L(route, :);
+    tmpPlots = [tmpPlots, ...
+        plot(j(:, 1), j(:, 2), 'm', 'LineWidth', 3)];
     
     uiwait(msgbox('New Route?'));
     delPlots(tmpPlots);

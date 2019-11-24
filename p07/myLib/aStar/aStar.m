@@ -1,4 +1,4 @@
-function [route, open, closed] = aStar(adj_matrix, cords, startNode, endNode, oBufSize)
+function [route, opened, closed, plots] = aStarGraphic(adj_matrix, cords, startNode, endNode, oBufSize, draw, contDraw, makeMovie, movieName)
 %A_STAR returns a list of indices that correspond to the shortest path
 
 %% Constants
@@ -12,26 +12,32 @@ PREV = 6; % needed for path
 M = size(adj_matrix, 1);
 
 %% Init Variables
+if (draw && makeMovie) 
+    file = strcat("matFiles/videos/", movieName);
+    vWriter = VideoWriter(file);
+    vWriter.FrameRate = 10;
+    open(vWriter)
+end
 % L(F, G, H, X, Y, PREV)
 L = [inf(M, 3), cords, zeros(M, 1)];
 closed = false(M, 1);
-open = zeros(0, 2);
+opened = zeros(0, 2);
 route = [];
 
-open(1, :) = [startNode, 0]; % h is not needed for the startNode
+opened(1, :) = [startNode, 0]; % h is not needed for the startNode
 L(startNode, G) = 0;
 L(startNode, PREV) = startNode; 
 
-hold on;
+plots = [];
 %% main loop
-while (~(isempty(open) || closed(endNode)))
-    [~, idx] = sort(open(:, 2));
-    open = open(idx, :);
-    if (size(open, 1) > oBufSize)
-        open = open(1:oBufSize, :);
+while (~(isempty(opened) || closed(endNode)))
+    [~, idx] = sort(opened(:, 2));
+    opened = opened(idx, :);
+    if (size(opened, 1) > oBufSize)
+        opened = opened(1:oBufSize, :);
     end
     
-    current = open(1, 1);
+    current = opened(1, 1);
     neigh = find(adj_matrix(current, :));
     for j = neigh(~closed(neigh))
         if (j == current)
@@ -50,10 +56,25 @@ while (~(isempty(open) || closed(endNode)))
             L(j, PREV) = current;
             L(j, F) = L(j, G) + L(j, H);
         end
-        open = [open; j, L(j, F)];
+        opened = [opened; j, L(j, F)];
+        if (draw)
+            plots = [plots, ...
+                plot(L(j, X), L(j, Y), 'ko', 'LineWidth', 1)]; %Plot reached point
+            if (contDraw)
+                drawnow();
+            end
+            if (makeMovie)
+                writeVideo(vWriter, getframe(gcf));
+            end
+        end
     end
-    open(open(:, 1) == current, :) = [];
+    opened(opened(:, 1) == current, :) = [];
     closed(current) = true;
+    
+    if(draw)
+        plots = [plots, ...
+            plot(L(current, X), L(current, Y), 'g.', 'MarkerSize', 15)];
+    end
 end
 
 %% reconstruct path
@@ -71,4 +92,12 @@ while (current ~= startNode)
 end
 
 route = flip(tmpRoute);
+if(draw)
+    plots = [plots, plot(L(route, X), L(route, Y), 'm', 'LineWidth', 3)];
+    if (makeMovie)
+        writeVideo(vWriter, getframe(gcf));
+        close(vWriter);
+    end
+end
+
 end
