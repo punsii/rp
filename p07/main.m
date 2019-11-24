@@ -1,5 +1,5 @@
 oBufSize = inf;
-forceHighway = true;
+forceHighway = false;
 
 draw = true;
 contDraw = false;
@@ -9,7 +9,7 @@ movieName = "aStarTMP";
 realMap = true;
 
 %% Load
-% 'A_all', 'L_all', 'nodeDistanceThreshhold'
+% 'A_all', 'L_all', 'kdTreeAll', 'nodeDistanceThreshhold'
 load('matFiles/boston_matrix_all.mat')
 L = L_all;
 A = A_all;
@@ -18,12 +18,12 @@ load('matFiles\boston_transformed_all.mat')
 map = all;
 
 if (forceHighway)
-    % 'A_highway', 'L_highway', 'nodeDistanceThreshhold'
+    % 'A_highway', 'L_highway', 'kdTreeHighway', 'nodeDistanceThreshhold'
     load('matFiles/boston_matrix_highway.mat')
     % 'highway'
     load('matFiles\boston_transformed_highway.mat')
 
-    % 'A_local', 'L_local', 'nodeDistanceThreshhold'
+    % 'A_local', 'L_local', 'kdTreeLocal', 'nodeDistanceThreshhold'
     load('matFiles/boston_matrix_local.mat')
     % 'local'
     load('matFiles\boston_transformed_local.mat')
@@ -71,36 +71,36 @@ while true
     txt = text(xRange(1), yRange(1), "Choose a start point");
     [x, y] = ginput(1);
     delete(txt);
-    start = p2pNode(x, y, L);
+    start = p2pTree(x, y, kdTreeAll);
     tmpPlots = [tmpPlots, ...
         plot(L(start, 1), L(start, 2), 'rx', 'LineWidth', 15)];
-    
+
     txt = text(xRange(1), yRange(1), "Choose an end point");
     [x, y] = ginput(1);
     delete(txt);
-    target = p2pNode(x, y , L);
+    target = p2pTree(x, y , kdTreeAll);
     tmpPlots = [tmpPlots, ...
         plot(L(target, 1), L(target, 2), 'bx', 'LineWidth', 15)];
-    
+
     tmpPlots = [tmpPlots, ...
         contPlot(L(start, :), L(target, :), xRange, yRange, 50)];
     drawnow();
-    
+
     if (forceHighway)
         mapshow(highway);
         tic;
         hEntries = findHWayEntries(all, A);
         hWayEnter = hEntries(p2pNode(L(start, 1), L(start, 2), L(hEntries, :)));
         hWayExit = hEntries(p2pNode(L(target, 1), L(target, 2), L(hEntries, :)));
-        
+
         % get index in corresponding sub shapefiles.
-        startLocal = p2pNode(L(start, 1), L(start, 2), L_local);
-        targetLocal = p2pNode(L(target, 1), L(target, 2), L_local);
-        hWayEnterLocal = p2pNode(L(hWayEnter, 1), L(hWayEnter, 2), L_local);
-        hWayExitLocal = p2pNode(L(hWayExit, 1), L(hWayExit, 2), L_local);
-        hWayEnterHighway = p2pNode(L(hWayEnter, 1), L(hWayEnter, 2), L_highway);
-        hWayExitHighway = p2pNode(L(hWayExit, 1), L(hWayExit, 2), L_highway);
-        
+        startLocal = p2pTree(L(start, 1), L(start, 2), kdTreeLocal);
+        targetLocal = p2pTree(L(target, 1), L(target, 2), kdTreeLocal);
+        hWayEnterLocal = p2pTree(L(hWayEnter, 1), L(hWayEnter, 2), kdTreeLocal);
+        hWayExitLocal = p2pTree(L(hWayExit, 1), L(hWayExit, 2), kdTreeLocal);
+        hWayEnterHighway = p2pTree(L(hWayEnter, 1), L(hWayEnter, 2), kdTreeHighway);
+        hWayExitHighway = p2pTree(L(hWayExit, 1), L(hWayExit, 2), kdTreeHighway);
+
         [r1, o1, c1, p1] = aStar(A_local, L_local, startLocal, hWayEnterLocal, ...
             oBufSize, draw, contDraw, makeMovie, strcat(movieName, 'p1'));
         [r2, o2, c2, p2] = aStar(A_highway, L_highway, hWayEnterHighway, hWayExitHighway, ...
@@ -138,7 +138,7 @@ while true
         tmpPlots = [tmpPlots, ...
             plot(j(:, 1), j(:, 2), 'm', 'LineWidth', 3)];
     end
-    
+
     uiwait(msgbox('New Route?'));
     delPlots(tmpPlots);
 end
