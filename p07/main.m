@@ -1,10 +1,12 @@
 oBufSize = inf;
 forceHighway = false;
 
-draw = true;
+draw = false;
 contDraw = false;
 makeMovie = false;
 movieName = "aStarTMP";
+
+useProfiler = false;
 
 realMap = true;
 
@@ -86,8 +88,11 @@ while true
         contPlot(L(start, :), L(target, :), xRange, yRange, 50)];
     drawnow();
 
+    if (useProfiler)
+        profile on;
+    end
     if (forceHighway)
-        mapshow(highway);
+%         mapshow(highway);
         tic;
         hEntries = findHWayEntries(all, A);
         hWayEnter = hEntries(p2pNode(L(start, 1), L(start, 2), L(hEntries, :)));
@@ -121,6 +126,10 @@ while true
         t = toc;
         disp(t);
         tmpPlots = [tmpPlots, aStarPlots];
+    end
+    if (userProfiler)
+        profile viewer;
+        profile off;
     end
 
     if (~draw)
