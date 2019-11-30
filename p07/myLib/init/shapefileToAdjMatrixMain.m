@@ -3,20 +3,23 @@ nodeDistanceThreshhold = 0.00003;
 load('matFiles/boston_transformed_all.mat') %loads 'all'
 [A_all, L_all] = shapefileToAdjMatrix(all, nodeDistanceThreshhold);
 kdTreeAll = KDTreeSearcher(L_all);
+laplaceAll = createLaplace(A_all);
 save('matFiles/boston_matrix_all.mat', ...
-    'A_all', 'L_all', 'kdTreeAll', 'nodeDistanceThreshhold');
+    'A_all', 'L_all', 'kdTreeAll', 'laplaceAll', 'nodeDistanceThreshhold');
 
 load('matFiles\boston_transformed_highway.mat') %loads 'highway'
 [A_highway, L_highway] = shapefileToAdjMatrix(highway, nodeDistanceThreshhold);
 kdTreeHighway = KDTreeSearcher(L_highway);
+laplaceHighway = createLaplace(A_highway);
 save('matFiles/boston_matrix_highway.mat', ...
-    'A_highway', 'L_highway', 'kdTreeHighway', 'nodeDistanceThreshhold');
+    'A_highway', 'L_highway', 'kdTreeHighway', 'laplaceHighway', 'nodeDistanceThreshhold');
 
 load('matFiles\boston_transformed_local.mat') %loads 'local'
 [A_local, L_local] = shapefileToAdjMatrix(local, nodeDistanceThreshhold);
 kdTreeLocal = KDTreeSearcher(L_local);
+laplaceLocal = createLaplace(A_local);
 save('matFiles/boston_matrix_local.mat', ...
-    'A_local', 'L_local', 'kdTreeLocal', 'nodeDistanceThreshhold');
+    'A_local', 'L_local', 'kdTreeLocal', 'laplaceLocal', 'nodeDistanceThreshhold');
 
 function [A, L] = shapefileToAdjMatrix(roads, nodeDistanceThreshhold)
 

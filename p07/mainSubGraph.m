@@ -1,19 +1,19 @@
 %% Load
 % 'A_all', 'L_all', 'kdTreeAll', 'nodeDistanceThreshhold'
-% load('matFiles/boston_matrix_all.mat')
-% L = L_all;
-% A = A_all;
-% % 'local'
-% load('matFiles\boston_transformed_all.mat')
-% map = all;
+load('matFiles/boston_matrix_all.mat')
+L = L_all;
+A = A_all;
+% 'local'
+load('matFiles\boston_transformed_all.mat')
+map = all;
 
 % 'A_highway', 'L_highway', 'kdTreeHighway', 'nodeDistanceThreshhold'
-load('matFiles/boston_matrix_highway.mat')
-L = L_highway;
-A = A_highway;
-% 'highway'
-load('matFiles\boston_transformed_highway.mat')
-map = highway;
+% load('matFiles/boston_matrix_highway.mat')
+% L = L_highway;
+% A = A_highway;
+% % 'highway'
+% load('matFiles\boston_transformed_highway.mat')
+% map = highway;
 % 
 % % 'A_local', 'L_local', 'kdTreeLocal', 'nodeDistanceThreshhold'
 % load('matFiles/boston_matrix_local.mat')
