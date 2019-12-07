@@ -15,7 +15,7 @@ realMap = true;
 load('matFiles/boston_matrix_all.mat')
 L = L_all;
 A = A_all;
-% 'local'
+% 'all'
 load('matFiles\boston_transformed_all.mat')
 map = all;
 

@@ -1,4 +1,4 @@
-function [route, opened, closed, plots] = aStarGraphic(adj_matrix, cords, startNode, endNode, oBufSize, draw, contDraw, makeMovie, movieName)
+function [route, opened, closed, plots, dist] = aStar(adj_matrix, cords, startNode, endNode, oBufSize, draw, contDraw, makeMovie, movieName)
 %A_STAR returns a list of indices that correspond to the shortest path
 
 %% Constants
@@ -100,4 +100,5 @@ if(draw)
     end
 end
 
+dist = L(endNode, G);
 end

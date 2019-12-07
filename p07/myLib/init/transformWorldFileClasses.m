@@ -12,7 +12,7 @@ mstruct = geotiff2mstruct(info);
 
 % create c*.mat
 for j = 1:7
-    filename = sprintf('%s%d','../../matFiles\boston_transformed_c', j);
+    filename = sprintf('%s%d', 'matFiles\boston_transformed_c', j);
     class = shaperead('boston_roads.shp',...
         'Selector',{@(v1) (v1 == j),'CLASS'});
     
@@ -35,7 +35,7 @@ end
 
 % create all.mat
 for j = 1:7
-    filename = sprintf('%s%d','../../matFiles\boston_transformed_c', j);
+    filename = sprintf('%s%d', 'matFiles\boston_transformed_c', j);
     load(filename)
     if j == 1
         all = class;
@@ -43,12 +43,12 @@ for j = 1:7
         all = [all; class];
     end
 end
-save('../../matFiles\boston_transformed_all', 'all');
+save('matFiles\boston_transformed_all', 'all');
 fprintf('Saved all\n');
 
 % create highway.mat
 for j = 1:3
-    filename = sprintf('%s%d','../../matFiles\boston_transformed_c', j);
+    filename = sprintf('%s%d', 'matFiles\boston_transformed_c', j);
     load(filename)
     if j == 1
         highway = class;
@@ -56,12 +56,12 @@ for j = 1:3
         highway = [highway; class];
     end
 end
-save('../../matFiles\boston_transformed_highway', 'highway');
+save('matFiles\boston_transformed_highway', 'highway');
 fprintf('Saved highway\n');
 
 % create local.mat
 for j = 4:7
-    filename = sprintf('%s%d','../../matFiles\boston_transformed_c', j);
+    filename = sprintf('%s%d', 'matFiles\boston_transformed_c', j);
     load(filename)
     if j == 4
         local = class;
@@ -69,5 +69,5 @@ for j = 4:7
         local = [local; class];
     end
 end
-save('../../matFiles\boston_transformed_local', 'local');
+save('matFiles\boston_transformed_local', 'local');
 fprintf('Saved local\n');
