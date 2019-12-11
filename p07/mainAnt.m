@@ -1,8 +1,9 @@
 %% Define Constants
 nIter = 100;
-rho = 0.05; % prozentual Abnahme des PWertes je Iteration.
-alpha = 1; % Gewichtung der Distanz-Heuristik
-beta = 2;   % Gewichtung des PWertes
+alpha = 1;  % Gewichtung der Distanz-Heuristik
+beta = 1;   % Gewichtung des PWertes
+delta = 1;  % Konstante für addition
+rho = 0.1;  % prozentual Abnahme des PWertes je Iteration.
 
 
 realMap = true;
@@ -16,8 +17,7 @@ map = all;
 
 if ~usePlacenames 
     load('matFiles/boston_matrix_all.mat', 'A_all', 'L_all')
-%     pointIndices = [607, 1279, 2203, 2281, 3217, 4253, 4423];
-    pointIndices = [607, 2203, 2281, 3217, 4253, 4423];
+    pointIndices = [20, 607, 1279, 2203, 2281, 3217, 4253, 4423, 5001];
     points = L_all(pointIndices, :);
     A = generateAntMatrix(pointIndices, A_all, L_all);
 else
@@ -51,5 +51,6 @@ plot(points(:, 1), points(:, 2), 'rx', 'LineWidth', 3, 'MarkerSize', 10);
 drawnow();
 fprintf('Done\n')
 
-fprintf('Starting ants...');
-ant(points, A, nIter, alpha, beta, rho, contDraw);
+fprintf('Starting ants...\n');
+finalTour = ant(points, A, nIter, alpha, beta, delta, rho, contDraw);
+disp(finalTour);

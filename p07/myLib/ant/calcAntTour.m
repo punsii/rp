@@ -8,7 +8,7 @@ while ~isempty(find(open, 1))
     options = find(open);
     PHValues = P(current, options) .^ alpha .* H(current, options) .^ beta;
     PHValues(PHValues == inf) = realmax;
-    weights = PHValues ./ sum(PHValues); 
+    weights = PHValues ./ sum(PHValues);
     last = current;
     current = datasample(options, 1, 'Weights', weights);
     
@@ -17,5 +17,6 @@ while ~isempty(find(open, 1))
     
     open(current) = false;
 end
+dist = dist + A(route(end), route(1));
 end
 

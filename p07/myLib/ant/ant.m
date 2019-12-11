@@ -1,4 +1,4 @@
-function finalTour = ant(points, A, nIter, alpha, beta, rho, contDraw)
+function finalTour = ant(points, A, nIter, alpha, beta, delta, rho, contDraw)
 
 n = size(points, 1);
 P = ones(n) * 0.5; % PheromonValues
@@ -15,20 +15,22 @@ for t = 1:nIter
         if dist < minDist
             minTour = tour;
         end
-        if(contDraw || t == nIter)
+        if (contDraw || (t == nIter))
             tmpPlots = [tmpPlots, ...
-                plotTour(tour, P, points, false)];
+                plotTour(tour, P, points, 'blue')];
         end
     end
     if(contDraw || t == nIter)
         tmpPlots = [tmpPlots, ...
-            plotTour(tour, P, points, true)];
+            plotTour(tour, P, points, 'green')];
     end
-    if(contDraw)
+    if (contDraw)
         drawnow();
     end
     if t == nIter
         finalTour = minTour;
+        tmpPlots = [tmpPlots, ...
+            plotTour(minTour, P, points, 'red')];
         break;
     end
     
@@ -38,7 +40,7 @@ for t = 1:nIter
     for j = 2:n
         a = minTour(n-1);
         b = minTour(n);
-        P(a, b) = P(a, b) + 1;
+        P(a, b) = P(a, b) + delta;
         P(b, a) = P(a, b);
     end
     delPlots(tmpPlots)
@@ -51,14 +53,10 @@ function delPlots(plots)
     end
 end
 
-function plots = plotTour(tour, P, points, best)
+function plots = plotTour(tour, P, points, color)
     plots = [];
-    color = 'blue';
     minWidth = 0.05;
-    if best
-        color = 'green';
-        minWidth = 2;
-    end
+    
     vertices = points(tour, :);
     for i = 1:length(vertices)-1    %-1 because you're plotting by line segment 
         plots = [plots, plot(vertices(i:i+1, 1), vertices(i:i+1, 2), ...
