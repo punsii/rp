@@ -1,23 +1,71 @@
-function bestRoute = ant(nIter, rho, alpha, beta, points, originalA, originalL)
-%% init
-% Use Placenames if no points are given
-if ~exists(points)
-    load('matFiles/boston_transformed_placenames.mat', 'A_placenames', 'names');
-    A = A_placenames;
-    points = transpose([names.X; names.Y]);
-else
-    A = generateAntMatrix(points, originalA, originalL);
-end
+function finalTour = ant(points, A, nIter, alpha, beta, rho, contDraw)
 
-n = size(points, 2);
+n = size(points, 1);
 P = ones(n) * 0.5; % PheromonValues
+H = 1./A; % Heuristik
 
-bestTour = zeros(n);
+finalTour = zeros(n, 1);
+tmpPlots = [];
 for t = 1:nIter
+    fprintf('%d\n', t);
+    minTour = zeros(n, 1);
+    minDist = inf;
     for a = 1:n
-        calcAntTour(i, P, A, rho, alpha, beta)
+        [tour, dist] = calcAntTour(a, A, H, P, alpha, beta);
+        if dist < minDist
+            minTour = tour;
+        end
+        if(contDraw || t == nIter)
+            tmpPlots = [tmpPlots, ...
+                plotTour(tour, P, points, false)];
+        end
     end
-    Vergleichen um aktuell beste Tour zu finden
-    Update der Pheromone
+    if(contDraw || t == nIter)
+        tmpPlots = [tmpPlots, ...
+            plotTour(tour, P, points, true)];
+    end
+    if(contDraw)
+        drawnow();
+    end
+    if t == nIter
+        finalTour = minTour;
+        break;
+    end
+    
+    % Evaporation
+    P = (1-rho) .* P;
+    % Intensification
+    for j = 2:n
+        a = minTour(n-1);
+        b = minTour(n);
+        P(a, b) = P(a, b) + 1;
+        P(b, a) = P(a, b);
+    end
+    delPlots(tmpPlots)
 end
+end
+
+function delPlots(plots)
+    for j = 1:length(plots)
+        delete(plots(j))
+    end
+end
+
+function plots = plotTour(tour, P, points, best)
+    plots = [];
+    color = 'blue';
+    minWidth = 0.05;
+    if best
+        color = 'green';
+        minWidth = 2;
+    end
+    vertices = points(tour, :);
+    for i = 1:length(vertices)-1    %-1 because you're plotting by line segment 
+        plots = [plots, plot(vertices(i:i+1, 1), vertices(i:i+1, 2), ...
+            color, 'LineWidth', minWidth + log(P(tour(i), tour(i+1)) + 1))];
+    end
+    %last line segments
+    plots = [plots, ...
+      plot([vertices(end, 1), vertices(1, 1)],  [vertices(end, 2), vertices(1, 2)], ...
+        color, 'LineWidth', minWidth + log(P(tour(i), tour(i+1)) + 1))];
 end

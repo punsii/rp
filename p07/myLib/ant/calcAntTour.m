@@ -1,11 +1,21 @@
-function tour = calcAntTour(i, P, A, rho, beta, alpha)
- Ameise Initialisieren
- while Städte offen
-    PNiveau berechnen
-    Vektor v konstruieren (länge 1000, mit elementen entsprechen den Wahrscheinlichkeiten)
-        z.B. (bei Länge 10): 0.3, 0.5 und 0.2 -> (1 1 1  2 2 2 2 2  3 3)
-    nächstes Wegstück berechnen
-    end
- return AntTour
- end
+function [route, dist] = calcAntTour(route, A, H, P, beta, alpha)
+open = true(size(A, 1), 1);
+dist = 0;
+
+current = route;
+open(current) = false;
+while ~isempty(find(open, 1))
+    options = find(open);
+    PHValues = P(current, options) .^ alpha .* H(current, options) .^ beta;
+    PHValues(PHValues == inf) = realmax;
+    weights = PHValues ./ sum(PHValues); 
+    last = current;
+    current = datasample(options, 1, 'Weights', weights);
+    
+    dist = dist + A(last, current);
+    route = [route, current];
+    
+    open(current) = false;
+end
+end
 
