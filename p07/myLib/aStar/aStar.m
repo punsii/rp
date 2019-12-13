@@ -1,4 +1,4 @@
-function [route, opened, closed, plots, dist] = aStar(adj_matrix, cords, startNode, endNode, oBufSize, draw, contDraw, makeMovie, movieName)
+function [route, opened, closed, plots, dist] = aStar(adj_matrix, cords, startNode, endNode, oBufSize, drawDots, drawResult, contDraw, makeMovie, movieName)
 %A_STAR returns a list of indices that correspond to the shortest path
 
 %% Constants
@@ -12,7 +12,7 @@ PREV = 6; % needed for path
 M = size(adj_matrix, 1);
 
 %% Init Variables
-if (draw && makeMovie) 
+if (drawDots && makeMovie) 
     file = strcat("matFiles/videos/", movieName);
     vWriter = VideoWriter(file);
     vWriter.FrameRate = 10;
@@ -57,7 +57,7 @@ while (~(isempty(opened) || closed(endNode)))
             L(j, F) = L(j, G) + L(j, H);
         end
         opened = [opened; j, L(j, F)];
-        if (draw)
+        if (drawDots)
             plots = [plots, ...
                 plot(L(j, X), L(j, Y), 'ko', 'LineWidth', 1)]; %Plot reached point
             if (contDraw)
@@ -71,7 +71,7 @@ while (~(isempty(opened) || closed(endNode)))
     opened(opened(:, 1) == current, :) = [];
     closed(current) = true;
     
-    if(draw)
+    if(drawDots)
         plots = [plots, ...
             plot(L(current, X), L(current, Y), 'g.', 'MarkerSize', 15)];
     end
@@ -92,7 +92,7 @@ while (current ~= startNode)
 end
 
 route = flip(tmpRoute);
-if(draw)
+if(drawResult)
     plots = [plots, plot(L(route, X), L(route, Y), 'm', 'LineWidth', 3)];
     if (makeMovie)
         writeVideo(vWriter, getframe(gcf));

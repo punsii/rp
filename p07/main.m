@@ -1,7 +1,8 @@
 oBufSize = inf;
 forceHighway = false;
 
-draw = false;
+drawDots = false;
+drawResult = false;
 contDraw = false;
 makeMovie = false;
 movieName = "aStarTMP";
@@ -107,11 +108,11 @@ while true
         hWayExitHighway = p2pTree(L(hWayExit, 1), L(hWayExit, 2), kdTreeHighway);
 
         [r1, o1, c1, p1] = aStar(A_local, L_local, startLocal, hWayEnterLocal, ...
-            oBufSize, draw, contDraw, makeMovie, strcat(movieName, 'p1'));
+            oBufSize, drawDots, drawResult, contDraw, makeMovie, strcat(movieName, 'p1'));
         [r2, o2, c2, p2] = aStar(A_highway, L_highway, hWayEnterHighway, hWayExitHighway, ...
-            oBufSize, draw, contDraw, makeMovie, strcat(movieName, 'p2'));
+            oBufSize, drawDots, drawResult, contDraw, makeMovie, strcat(movieName, 'p2'));
         [r3, o3, c3, p3] = aStar(A_local, L_local, hWayExitLocal, targetLocal, ...
-            oBufSize, draw, contDraw, makeMovie, strcat(movieName, 'p3'));
+            oBufSize, drawDots, drawResult, contDraw, makeMovie, strcat(movieName, 'p3'));
         t = toc;
         disp(t);
         route = [r1, r2, r3];
@@ -122,7 +123,7 @@ while true
         tic;
         [route, opened, closed, aStarPlots] = ...
             aStar(A, L, start, target, oBufSize, ...
-                draw, contDraw, makeMovie, movieName);
+                drawDots, drawResult, contDraw, makeMovie, movieName);
         t = toc;
         disp(t);
         tmpPlots = [tmpPlots, aStarPlots];
@@ -132,7 +133,7 @@ while true
         profile off;
     end
 
-    if (~draw)
+    if (~drawDots)
         opened = opened(:, 1);
         % visited spots
         j = L([find(closed); opened], :);
