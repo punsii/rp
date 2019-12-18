@@ -12,7 +12,7 @@ PREV = 6; % needed for path
 M = size(adj_matrix, 1);
 
 %% Init Variables
-if (drawDots && makeMovie) 
+if (drawDots && makeMovie)
     file = strcat("matFiles/videos/", movieName);
     vWriter = VideoWriter(file);
     vWriter.FrameRate = 10;
@@ -26,7 +26,7 @@ route = [];
 
 opened(1, :) = [startNode, 0]; % h is not needed for the startNode
 L(startNode, G) = 0;
-L(startNode, PREV) = startNode; 
+L(startNode, PREV) = startNode;
 
 plots = [];
 %% main loop
@@ -36,7 +36,7 @@ while (~(isempty(opened) || closed(endNode)))
     if (size(opened, 1) > oBufSize)
         opened = opened(1:oBufSize, :);
     end
-    
+
     current = opened(1, 1);
     neigh = find(adj_matrix(current, :));
     for j = neigh(~closed(neigh))
@@ -47,7 +47,7 @@ while (~(isempty(opened) || closed(endNode)))
         if (L(j, H) == inf)
             L(j, H) = calcDistance(L(endNode, X:Y), L(j, X:Y));
         end
-        
+
         % calc h and f
         % compare to current h and f of this node
         newDist = L(current, G) + adj_matrix(current, j);
@@ -70,7 +70,7 @@ while (~(isempty(opened) || closed(endNode)))
     end
     opened(opened(:, 1) == current, :) = [];
     closed(current) = true;
-    
+
     if(drawDots)
         plots = [plots, ...
             plot(L(current, X), L(current, Y), 'g.', 'MarkerSize', 15)];
@@ -88,7 +88,7 @@ while (current ~= startNode)
         return
     end
     tmpRoute = [tmpRoute, prev];
-    current = prev;    
+    current = prev;
 end
 
 route = flip(tmpRoute);
