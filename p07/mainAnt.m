@@ -53,6 +53,8 @@ plot(points(:, 1), points(:, 2), 'rx', 'LineWidth', 3, 'MarkerSize', 10);
 drawnow();
 fprintf('Done\n')
 
+%% Main
+
 fprintf('Starting ants...\n');
 finalTour = ant(points, pointIndices, A, A_all, L, nIter, alpha, beta, delta, rho, contDraw);
 fprintf('Done\n');

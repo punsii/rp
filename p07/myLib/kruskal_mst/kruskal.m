@@ -27,7 +27,7 @@ while ~isempty(edges)
    
    if IDs(j) ~= IDs(k)
        w = edges(1, 3);
-       IDs(IDs == k) = j;
+       IDs(IDs == IDs(k)) = IDs(j);
        mst(j, k) = w;
        mst(k, j) = w;
    end
