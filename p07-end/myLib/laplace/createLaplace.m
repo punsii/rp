@@ -11,6 +11,5 @@ for j = 1:n
         end
     end
     % Diagonal needs to be the negative sum of the rest of the row
-    L(j, j) = size(find(L(j, :)), 2); 
+    L(j, j) = size(find(L(j, :)), 2);
 end
-

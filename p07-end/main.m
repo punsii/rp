@@ -1,13 +1,13 @@
 oBufSize = inf;
-forceHighway = false;
+forceHighway = true;
 
-drawDots = false;
-drawResult = false;
+drawDots = true;
+drawResult = true;
 contDraw = false;
 makeMovie = false;
 movieName = "aStarTMP";
 
-useProfiler = false;
+useProfiler = true;
 
 realMap = true;
 
@@ -128,7 +128,7 @@ while true
         disp(t);
         tmpPlots = [tmpPlots, aStarPlots];
     end
-    if (userProfiler)
+    if (useProfiler)
         profile viewer;
         profile off;
     end

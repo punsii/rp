@@ -1,13 +1,13 @@
 %% Define Constants
-nIter = 300;
-alpha = 2;  % Gewichtung der Distanz-Heuristik
-beta = 1;   % Gewichtung des PWertes
+nIter = 500;
+alpha = 1;  % Gewichtung der Distanz-Heuristik
+beta = 0.6;   % Gewichtung des PWertes
 delta = 10;  % Konstante für addition
 rho = 0.1;  % prozentual Abnahme des PWertes je Iteration.
 
 
 realMap = true;
-contDraw = true;
+contDraw = false;
 usePlacenames = false;
 
 %% Preparation

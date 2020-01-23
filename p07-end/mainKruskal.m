@@ -4,7 +4,8 @@ load('matFiles\boston_transformed_all.mat', 'all')
 map = all;
 load('matFiles/boston_matrix_all.mat', 'L_all', 'A_all')
 
-pointIndices = [20, 106, 607, 1279, 2203, 2281, 3217, 3333, 4253, 4423, 5001];
+pointIndices = [42, 84, 126, 57, 168, 4903, 1234, 4567, 72, 3333, 5010, 1213, 794, 2030];
+% pointIndices = [20, 106, 607, 1279, 2203, 2281, 3217, 3333, 4253, 4423, 5001];
 % pointIndices = [20, 30, 40, 50, 60, 80];
 nPoints = size(pointIndices, 2);
 points = L_all(pointIndices, :);
